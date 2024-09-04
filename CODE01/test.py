@@ -2,20 +2,20 @@
 Autor: Zhang Tianxiang
 Date: 2024-09-01 13:22:21
 LastEditors: Zhang Tianxiang
-LastEditTime: 2024-09-05 02:28:39
+LastEditTime: 2024-09-05 03:49:25
 '''
 import cvxpy as cvx
 import numpy as np
 
-P_ = np.ones((3,1))
-
-H = np.asarray([[0.1, 0.02, 0.01], [0.02, 0.2, 0.01], [0.02, 0.01, 0.15]])
+P_ = np.ones((3,1)) * 0.5
+pp = []
+H = np.asarray([[0.12, 0.02, 0.01], [0.02, 0.1, 0.01], [0.02, 0.01, 0.8]])
 
 H_diag = np.diag(np.diag(H))
 
-sig2 = 1
+sig2 = 0.06
 
-for i in range(100):
+for i in range(20):
 #     y2 = np.sqrt(0.6*p2_) / (0.6*p3_ + 0.1)
 #     y3 = np.sqrt(1.8*p3_) / (0.6*p2_ + 0.1)
     y = np.sqrt(H * P_) / ((H - H_diag) * P_ + sig2)
@@ -42,7 +42,14 @@ for i in range(100):
     prob = cvx.Problem(obj, cst)
     # rsl = prob.solve(solver='ECOS')
     rsl = prob.solve()
+    pp.append(rsl)
+    print("######")
     print(rsl)
     print(P.value)
-    print("######")
+   
     P_ = P.value
+    print(np.diag((H_diag * P_) / ((H - H_diag) * P_ + sig2)))
+
+import matplotlib.pyplot as plt
+plt.plot(pp)
+plt.show()
