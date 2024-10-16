@@ -69,7 +69,7 @@ def radar_recv_power(radar_distance, power_trans, path_exponent=-2, **kwargs)->l
 
 if __name__ == '__main__':
     import numpy as np
-    m = 100000
+    m = 10000
     I_ = []
     I_the_dat = []
     rho = np.arange(10,100,10)
@@ -77,12 +77,8 @@ if __name__ == '__main__':
         I = 0
         for k in range(m):
             v_x = vehicle_distribution(rho_i, 1e3, 10, 0.1)
-            #
             v_d = facing_vehicle_distance(v_x, 3.6, 20)
-            # print(v_d)
-            #
             Iv_v = radar_recv_power(v_d, 10e-3, coe=(1000 * 0.004 / (4 * np.pi)) ** 2)
-            # print(sum(r_i))
             I = I + sum(Iv_v)
         I_.append(I / m)
 
@@ -96,7 +92,11 @@ if __name__ == '__main__':
 
 
     import matplotlib.pyplot as plt
+    from style import savePic
+    fig = plt.figure()
     plt.scatter(rho, I_)
     plt.plot(rho, I_the_dat)
     # plt.scatter(I_, np.zeros(np.size(I_)))
+
+    savePic(fig, '干扰.svg')
     plt.show()
