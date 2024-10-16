@@ -72,7 +72,7 @@ if __name__ == '__main__':
     m = 10000
     I_ = []
     I_the_dat = []
-    rho = np.arange(10,100,10)
+    rho = range(10,100,10)
     for rho_i in rho:
         I = 0
         for k in range(m):
@@ -90,13 +90,21 @@ if __name__ == '__main__':
     Iv_u = 0
     Iu_v = 0
 
+    from tools import save_json_dat, save_pic, read_json_dat
+    save_json_dat("rho",rho)
+    save_json_dat("I_sim", I_)
+    save_json_dat("I_the", I_the_dat)
+
+    rho_r = read_json_dat("rho")
+    I_r = read_json_dat("I_sim")
+    I_the_r = read_json_dat("I_the")
 
     import matplotlib.pyplot as plt
-    from style import savePic
+    import pic_style
+    pic_style.xuebao_style()
     fig = plt.figure()
-    plt.scatter(rho, I_)
-    plt.plot(rho, I_the_dat)
-    # plt.scatter(I_, np.zeros(np.size(I_)))
+    plt.scatter(rho_r, I_r)
+    plt.plot(rho_r, I_the_r)
 
-    savePic(fig, '干扰.svg')
+    save_pic(fig, '干扰.svg')
     plt.show()
