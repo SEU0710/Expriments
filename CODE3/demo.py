@@ -43,8 +43,8 @@ def vehicle_rsu_distance(vehicle_location, vertical_spacing, hight_intercept, ho
     """
     u_distance = []
     for v_x in vehicle_location:
-        if (v_x**2 > (vertical_spacing / np.tan(horizontal_angle / 2)) ** 2
-                     + (hight_intercept / np.tan(vertical_angle / 2) ** 2)):
+        if (v_x >= ((vertical_spacing / np.tan(horizontal_angle / 2)) ** 2
+                     + (hight_intercept / np.tan(vertical_angle / 2) ** 2)) ** 0.5):
             u_distance.append((v_x ** 2 + vertical_spacing ** 2 + hight_intercept ** 2) ** 0.5)
 
     return u_distance
@@ -63,24 +63,6 @@ def radar_recv_power(radar_distance, power_trans, path_exponent=-2, **kwargs)->l
 
     return [factor * power_trans * dist ** path_exponent
             for dist in radar_distance]
-
-
-def mean_interference_the(rho_i, epsilon=0.1):
-    rho_h = (1 - np.exp(-2 * epsilon * rho_i / L * dh)) / (2 * dh)
-    varepsilon = (d2b(Gv) * lamda_v / (4 * np.pi)) ** 2
-    # I_the = varepsilon * rho_h * Pt_v * np.tan(d2r(theta) / 2) / dw  # 近似
-    I_the = varepsilon * rho_h * Pt_v * (np.pi / 2 - np.arctan(1 / np.tan(d2r(theta) / 2))) / dw  # 非近似
-    return I_the
-
-def mean_interference_sim(rho_i, cola:int, epsilon=0.1):
-    I = 0
-    for i in range(cola):  # 蒙特卡洛次数
-        v_x = vehicle_distribution(rho_i, L, dh, epsilon)
-        v_d = facing_vehicle_distance(v_x, dw, d2r(theta))
-        Iv_v = radar_recv_power(v_d, Pt_v, coe=(d2b(Gv) * lamda_v / (4 * np.pi)) ** 2)
-        I = I + sum(Iv_v)
-    return I / cola
-
 
 
 if __name__ == '__main__':

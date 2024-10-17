@@ -27,7 +27,7 @@ L = 1e3  # m
 sigma = 30  # dBsm
 
 theta = 20  # degree
-varphi = 5  # degree
+varphi = 10  # degree
 
 
 
