@@ -1,13 +1,11 @@
-import numpy as np
-
 from demo import *
 
 def mean_interference_the_v2u(rho_i, epsilon_vu=0.02):
     rho_h = (1 - np.exp(-2 * 1 * rho_i / L * dh)) / (2 * dh)
-    varepsilon = d2b(Gv) * d2b(Gu) * (lamda_v / (4 * np.pi)) ** 2
+    varepsilon = d2b(Gv) * d2b(Gu) * (lamda_u / (4 * np.pi)) ** 2
     delta = np.sqrt((dw / 2 / np.tan(d2r(theta) / 2)) ** 2 + ((hu-hv) / np.tan(d2r(varphi) / 2))**2)
     # I_the = varepsilon * rho_h * Pt_u / delta  # 近似
-    I_the = (varepsilon * rho_h * Pt_u * (np.pi / 2 - np.arctan(delta / np.sqrt((dw/2)**2 + (hu-hv)**2)))
+    I_the = (varepsilon * rho_h * Pt_v * (np.pi / 2 - np.arctan(delta / np.sqrt((dw/2)**2 + (hu-hv)**2)))
              / np.sqrt((dw/2)**2 + (hu-hv)**2))  # 非近似
     return epsilon_vu * I_the
 
@@ -16,7 +14,7 @@ def mean_interference_sim_v2u(rho_i, cola:int, epsilon_vu=0.02):
     for i in range(cola):  # 蒙特卡洛次数
         v_x = vehicle_distribution(rho_i, L, dh, 1)
         v_d = vehicle_rsu_distance(v_x, dw/2, hu-hv, d2r(theta), d2r(varphi))
-        Iv_u = radar_recv_power(v_d, Pt_u, coe=d2b(Gv) * d2b(Gu) * (lamda_v / (4 * np.pi)) ** 2)
+        Iv_u = radar_recv_power(v_d, Pt_v, coe=d2b(Gv) * d2b(Gu) * (lamda_u / (4 * np.pi)) ** 2)
         I = I + sum(Iv_u)
     return epsilon_vu * (I / cola)
 

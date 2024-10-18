@@ -1,5 +1,5 @@
 Pt_v = 10e-3  # W
-Pt_u = 20e-3
+Pt_u = 100e-3
 
 fc_v = 76.5e9  # Hz
 fc_u = 78.5e9  # Hz
