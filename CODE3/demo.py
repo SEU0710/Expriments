@@ -43,8 +43,8 @@ def vehicle_rsu_distance(vehicle_location, vertical_spacing, hight_intercept, ho
     """
     u_distance = []
     for v_x in vehicle_location:
-        if (v_x >= ((vertical_spacing / np.tan(horizontal_angle / 2)) ** 2
-                     + (hight_intercept / np.tan(vertical_angle / 2) ** 2)) ** 0.5):
+        if (v_x ** 2 > (vertical_spacing / np.tan(horizontal_angle / 2)) ** 2
+                        + (hight_intercept / np.tan(vertical_angle / 2)) ** 2):
             u_distance.append((v_x ** 2 + vertical_spacing ** 2 + hight_intercept ** 2) ** 0.5)
 
     return u_distance
